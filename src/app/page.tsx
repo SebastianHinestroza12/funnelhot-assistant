@@ -6,11 +6,13 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { useAssistants } from "@/features/assistants/hooks/useAssistants";
 import { AssistantModal } from "@/components/assistants/AssistantModal";
 import { Assistant } from "@/features/assistants/interfaces";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const { assistants, add, update, remove } = useAssistants();
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<Assistant | null>(null);
+  const router = useRouter();
 
   return (
     <div className="space-y-6">
@@ -37,7 +39,7 @@ export default function Home() {
                 setEditing(a);
                 setOpen(true);
               }}
-              onTrain={() => alert("Entrenamiento próximamente 🚀")}
+              onTrain={() => router.push(`/assistants/${a.id}`)}
               onDelete={() => remove(a.id)}
             />
           ))}
