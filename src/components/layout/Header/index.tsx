@@ -8,7 +8,7 @@ export const Header = () => {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
         <div className="flex items-center gap-3">
           <div className="relative flex h-11 w-11 items-center justify-center rounded-xl bg-linear-to-br from-blue-600 to-blue-700 shadow-lg shadow-blue-600/25 transition-transform hover:scale-105">
-            <Bot className="w-6 h-6 text-white" />
+            <Bot className="w-8 h-8 text-white" />
             <div className="absolute inset-0 rounded-xl bg-linear-to-tr from-white/0 to-white/10" />
           </div>
 

@@ -36,6 +36,18 @@ export const AssistantModal = ({
 }: Props) => {
   const [step, setStep] = useState<1 | 2>(1);
   const [loading, setLoading] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const {
     register,
@@ -68,34 +80,22 @@ export const AssistantModal = ({
 
   const submit = async (data: AssistantFormData) => {
     setLoading(true);
-
     const isEdit = Boolean(initialData);
-    const toastId = toast.loading(
-      isEdit ? "Actualizando asistente..." : "Creando asistente...",
-    );
 
     try {
       await delaySeconds();
       await onSave(data);
 
-      toast.update(toastId, {
-        render: isEdit
+      toast.success(
+        isEdit
           ? "Asistente actualizado correctamente"
           : "Asistente creado correctamente",
-        type: "success",
-        isLoading: false,
-        autoClose: 3000,
-      });
+      );
 
       onClose();
       setStep(1);
-    } catch {
-      toast.update(toastId, {
-        render: "Ocurrió un error, intenta nuevamente",
-        type: "error",
-        isLoading: false,
-        autoClose: 3000,
-      });
+    } catch (error) {
+      toast.error("Ocurrió un error al guardar el asistente");
     } finally {
       setLoading(false);
     }
@@ -127,7 +127,6 @@ export const AssistantModal = ({
       currentValues.short + currentValues.medium + currentValues.long;
 
     if (currentTotal > 100) {
-      // Ajustar los otros valores proporcionalmente
       const otherKeys = RESPONSE_KEYS.filter((k) => k !== key);
       const remaining = 100 - value;
       const otherTotal = otherKeys.reduce(
@@ -158,18 +157,18 @@ export const AssistantModal = ({
             className="fixed inset-0 z-50 bg-black/60 backdrop-blur-none"
           />
 
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4">
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ duration: 0.2 }}
-              className="relative w-full max-w-2xl rounded-3xl border border-slate-200 bg-white shadow-2xl overflow-hidden"
+              className="relative w-full max-w-2xl rounded-2xl sm:rounded-3xl border border-slate-200 bg-white shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
             >
-              <div className="relative rounded-t-3xl bg-blue-600 p-8">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3">
+              <div className="relative rounded-t-2xl sm:rounded-t-3xl bg-blue-600 p-4 sm:p-6 md:p-8 shrink-0">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 sm:gap-3">
                       <motion.div
                         initial={{ rotate: 0 }}
                         animate={{ rotate: 360 }}
@@ -178,15 +177,15 @@ export const AssistantModal = ({
                           repeat: Number.POSITIVE_INFINITY,
                           ease: "linear",
                         }}
-                        className="rounded-xl bg-white/20 backdrop-blur-sm p-2.5 shadow-lg"
+                        className="rounded-lg sm:rounded-xl bg-white/20 backdrop-blur-sm p-1.5 sm:p-2.5 shadow-lg shrink-0"
                       >
-                        <Sparkles className="h-6 w-6 text-white" />
+                        <Sparkles className="h-4 w-4 sm:h-6 sm:w-6 text-white" />
                       </motion.div>
-                      <h2 className="text-2xl font-bold text-white">
+                      <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-white truncate">
                         {initialData ? "Editar Asistente" : "Crear Asistente"}
                       </h2>
                     </div>
-                    <p className="mt-2 text-sm text-blue-100">
+                    <p className="mt-1 sm:mt-2 text-xs sm:text-sm text-blue-100">
                       Paso {step} de 2 •{" "}
                       {step === 1
                         ? "Configuración básica"
@@ -197,17 +196,17 @@ export const AssistantModal = ({
                   <button
                     onClick={onClose}
                     disabled={loading}
-                    className="rounded-xl p-2 text-white/80 hover:bg-white/20 hover:text-white transition-colors backdrop-blur-sm"
+                    className="rounded-lg sm:rounded-xl p-1.5 sm:p-2 text-white/80 hover:bg-white/20 hover:text-white transition-colors backdrop-blur-sm shrink-0"
                   >
-                    <X className="h-5 w-5" />
+                    <X className="h-4 w-4 sm:h-5 sm:w-5" />
                   </button>
                 </div>
 
-                <div className="mt-6 flex gap-2">
+                <div className="mt-4 sm:mt-6 flex gap-1.5 sm:gap-2">
                   {[1, 2].map((s) => (
                     <div
                       key={s}
-                      className="h-2 flex-1 rounded-full bg-white/20 backdrop-blur-sm overflow-hidden"
+                      className="h-1.5 sm:h-2 flex-1 rounded-full bg-white/20 backdrop-blur-sm overflow-hidden"
                     >
                       {step >= s && (
                         <motion.div
@@ -222,22 +221,22 @@ export const AssistantModal = ({
                 </div>
               </div>
 
-              <div className="p-8">
+              <div className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-8">
                 {step === 1 && (
                   <motion.div
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className="space-y-6"
+                    className="space-y-4 sm:space-y-6"
                   >
                     {/* NAME */}
                     <div>
-                      <label className="text-sm font-semibold text-slate-700 mb-2 block">
+                      <label className="text-xs sm:text-sm font-semibold text-slate-700 mb-1.5 sm:mb-2 block">
                         Nombre del asistente *
                       </label>
                       <input
                         {...register("name")}
                         disabled={loading}
-                        className={`w-full rounded-xl border-2 px-4 py-3 text-sm transition-all focus:outline-none focus:ring-4 ${
+                        className={`w-full rounded-lg sm:rounded-xl border-2 px-3 sm:px-4 py-2.5 sm:py-3 text-sm transition-all focus:outline-none focus:ring-2 sm:focus:ring-4 ${
                           errors.name
                             ? "border-red-300 bg-red-50 focus:border-red-500 focus:ring-red-100"
                             : "border-slate-200 focus:border-blue-500 focus:ring-blue-100"
@@ -248,9 +247,9 @@ export const AssistantModal = ({
                         <motion.p
                           initial={{ opacity: 0, y: -10 }}
                           animate={{ opacity: 1, y: 0 }}
-                          className="mt-2 text-xs text-red-600 flex items-center gap-1.5"
+                          className="mt-1.5 sm:mt-2 text-xs text-red-600 flex items-center gap-1.5"
                         >
-                          <AlertCircle className="h-3.5 w-3.5" />
+                          <AlertCircle className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                           {errors.name.message}
                         </motion.p>
                       )}
@@ -262,13 +261,13 @@ export const AssistantModal = ({
                       control={control}
                       render={({ field }) => (
                         <div>
-                          <label className="text-sm font-semibold text-slate-700 mb-2 block">
+                          <label className="text-xs sm:text-sm font-semibold text-slate-700 mb-1.5 sm:mb-2 block">
                             Idioma *
                           </label>
                           <select
                             {...field}
                             disabled={loading}
-                            className="w-full rounded-xl border-2 border-slate-200 px-4 py-3 text-sm focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all"
+                            className="w-full rounded-lg sm:rounded-xl border-2 border-slate-200 px-3 sm:px-4 py-2.5 sm:py-3 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 sm:focus:ring-4 focus:ring-blue-100 transition-all"
                           >
                             <option value="">Selecciona un idioma</option>
                             {Object.values(Language).map((l) => (
@@ -287,13 +286,13 @@ export const AssistantModal = ({
                       control={control}
                       render={({ field }) => (
                         <div>
-                          <label className="text-sm font-semibold text-slate-700 mb-2 block">
+                          <label className="text-xs sm:text-sm font-semibold text-slate-700 mb-1.5 sm:mb-2 block">
                             Tono *
                           </label>
                           <select
                             {...field}
                             disabled={loading}
-                            className="w-full rounded-xl border-2 border-slate-200 px-4 py-3 text-sm focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all"
+                            className="w-full rounded-lg sm:rounded-xl border-2 border-slate-200 px-3 sm:px-4 py-2.5 sm:py-3 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 sm:focus:ring-4 focus:ring-blue-100 transition-all"
                           >
                             <option value="">Selecciona un tono</option>
                             {Object.values(Tone).map((t) => (
@@ -312,46 +311,48 @@ export const AssistantModal = ({
                   <motion.div
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className="space-y-6"
+                    className="space-y-4 sm:space-y-6"
                   >
-                    <div className="space-y-6">
+                    <div className="space-y-4 sm:space-y-6">
                       {RESPONSE_KEYS.map((key) => {
                         const config = RESPONSE_LABELS[key];
                         const Icon = config.icon;
                         const value = watch(`responseLength.${key}`) || 0;
 
                         return (
-                          <div key={key} className="space-y-3">
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center gap-2">
+                          <div key={key} className="space-y-2 sm:space-y-3">
+                            <div className="flex items-center justify-between gap-2">
+                              <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
                                 <div
-                                  className={`rounded-lg bg-linear-to-br ${
+                                  className={`rounded-md sm:rounded-lg bg-linear-to-br ${
                                     key === "short"
                                       ? "from-emerald-100 to-emerald-50"
                                       : key === "medium"
                                       ? "from-blue-100 to-blue-50"
                                       : "from-purple-100 to-purple-50"
-                                  } p-2`}
+                                  } p-1.5 sm:p-2 shrink-0`}
                                 >
-                                  <Icon className={`h-4 w-4 ${config.color}`} />
+                                  <Icon
+                                    className={`h-3.5 w-3.5 sm:h-4 sm:w-4 ${config.color}`}
+                                  />
                                 </div>
-                                <label className="text-sm font-semibold text-slate-700">
+                                <label className="text-xs sm:text-sm font-semibold text-slate-700 truncate">
                                   Respuesta {config.label}
                                 </label>
                               </div>
-                              <div className="flex items-center gap-2">
+                              <div className="flex items-center gap-1 sm:gap-2">
                                 <motion.span
                                   key={value}
                                   initial={{ scale: 1.2, color: "#3b82f6" }}
                                   animate={{ scale: 1, color: "#1e293b" }}
-                                  className="text-2xl font-bold text-slate-800 min-w-14 text-right"
+                                  className="text-xl sm:text-2xl font-bold text-slate-800 min-w-10 sm:min-w-14 text-right"
                                 >
                                   {value}%
                                 </motion.span>
                               </div>
                             </div>
 
-                            <div className="relative">
+                            <div className="relative px-1">
                               <input
                                 type="range"
                                 min="0"
@@ -365,7 +366,7 @@ export const AssistantModal = ({
                                   )
                                 }
                                 disabled={loading}
-                                className="w-full h-3 rounded-full appearance-none cursor-pointer transition-all"
+                                className="w-full h-2 sm:h-3 rounded-full appearance-none cursor-pointer transition-all"
                                 style={{
                                   background: `linear-gradient(to right, ${
                                     key === "short"
@@ -382,7 +383,22 @@ export const AssistantModal = ({
                                   } ${value}%, #e2e8f0 ${value}%, #e2e8f0 100%)`,
                                 }}
                               />
+                              {/* Mobile touch area enhancement */}
+                              {isMobile && (
+                                <div className="absolute inset-0 -m-2"></div>
+                              )}
                             </div>
+
+                            {/* Step indicators for mobile */}
+                            {isMobile && (
+                              <div className="flex justify-between text-xs text-slate-500 px-1">
+                                <span>0%</span>
+                                <span>25%</span>
+                                <span>50%</span>
+                                <span>75%</span>
+                                <span>100%</span>
+                              </div>
+                            )}
                           </div>
                         );
                       })}
@@ -391,7 +407,7 @@ export const AssistantModal = ({
                     <motion.div
                       initial={{ scale: 0.95 }}
                       animate={{ scale: 1 }}
-                      className={`rounded-2xl border-2 p-2 text-center transition-all ${
+                      className={`rounded-xl sm:rounded-2xl border-2 p-3 sm:p-4 text-center transition-all ${
                         total === 100
                           ? "border-emerald-300 bg-linear-to-br from-emerald-50 to-green-50 shadow-lg shadow-emerald-100"
                           : total > 100
@@ -399,19 +415,19 @@ export const AssistantModal = ({
                           : "border-amber-300 bg-linear-to-br from-amber-50 to-yellow-50 shadow-lg shadow-amber-100"
                       }`}
                     >
-                      <div className="flex items-center justify-center gap-3">
+                      <div className="flex items-center justify-center gap-2 sm:gap-3">
                         <div
-                          className={`rounded-full p-2 ${
+                          className={`rounded-full p-1.5 sm:p-2 ${
                             total === 100
                               ? "bg-emerald-500"
                               : total > 100
                               ? "bg-red-500"
                               : "bg-amber-500"
-                          }`}
+                          } shrink-0`}
                         >
                           {total === 100 ? (
                             <svg
-                              className="h-5 w-5 text-white"
+                              className="h-4 w-4 sm:h-5 sm:w-5 text-white"
                               fill="none"
                               viewBox="0 0 24 24"
                               stroke="currentColor"
@@ -424,18 +440,18 @@ export const AssistantModal = ({
                               />
                             </svg>
                           ) : (
-                            <AlertCircle className="h-5 w-5 text-white" />
+                            <AlertCircle className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
                           )}
                         </div>
-                        <div>
-                          <p className="text-sm font-medium text-slate-600">
+                        <div className="min-w-0">
+                          <p className="text-xs sm:text-sm font-medium text-slate-600 truncate">
                             Total configurado
                           </p>
                           <motion.p
                             key={total}
                             initial={{ scale: 1.1 }}
                             animate={{ scale: 1 }}
-                            className={`text-3xl font-bold ${
+                            className={`text-2xl sm:text-3xl font-bold ${
                               total === 100
                                 ? "text-emerald-700"
                                 : total > 100
@@ -448,7 +464,7 @@ export const AssistantModal = ({
                         </div>
                       </div>
                       {total !== 100 && (
-                        <p className="mt-2 text-xs text-slate-500">
+                        <p className="mt-1.5 sm:mt-2 text-xs text-slate-500">
                           {total > 100
                             ? "El total debe ser exactamente 100%"
                             : `Falta ${100 - total}% por configurar`}
@@ -459,68 +475,76 @@ export const AssistantModal = ({
                 )}
               </div>
 
-              <div className="flex gap-3 border-t border-slate-200 bg-slate-50 p-6">
-                {step === 2 && (
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={prevStep}
-                    disabled={loading}
-                    className="rounded-xl border-2 border-slate-300 px-5 py-2.5 font-medium text-slate-700 hover:bg-white hover:border-slate-400 transition-all disabled:opacity-50 flex items-center gap-2"
-                  >
-                    <ChevronLeft className="h-4 w-4" />
-                    Anterior
-                  </motion.button>
-                )}
-
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={onClose}
-                  disabled={loading}
-                  className="flex-1 rounded-xl border-2 border-slate-300 px-5 py-2.5 font-medium text-slate-700 hover:bg-white hover:border-slate-400 transition-all disabled:opacity-50"
+              <div className="border-t border-slate-200 bg-slate-50 p-3 sm:p-4 md:p-6 shrink-0">
+                <div
+                  className={`flex gap-2 sm:gap-3 ${
+                    step === 2 ? "flex-col sm:flex-row" : "flex-col sm:flex-row"
+                  }`}
                 >
-                  Cancelar
-                </motion.button>
+                  {step === 2 && (
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={prevStep}
+                      disabled={loading}
+                      className="order-1 sm:order-0 rounded-lg sm:rounded-xl border-2 border-slate-300 px-4 sm:px-5 py-2.5 font-medium text-slate-700 hover:bg-white hover:border-slate-400 transition-all disabled:opacity-50 flex items-center justify-center gap-1.5 sm:gap-2 text-sm sm:text-base"
+                    >
+                      <ChevronLeft className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                      Anterior
+                    </motion.button>
+                  )}
 
-                {step === 1 ? (
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    onClick={nextStep}
-                    disabled={!step1Valid || loading}
-                    className="flex-1 rounded-xl px-5 py-2.5 font-semibold bg-blue-600 text-white hover:from-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg shadow-blue-200"
+                    onClick={onClose}
+                    disabled={loading}
+                    className={`rounded-lg sm:rounded-xl border-2 border-slate-300 px-4 sm:px-5 py-2.5 font-medium text-slate-700 hover:bg-white hover:border-slate-400 transition-all disabled:opacity-50 text-sm sm:text-base ${
+                      step === 2 ? "order-2 sm:order-0" : "order-1"
+                    }`}
                   >
-                    Siguiente
-                    <ChevronRight className="h-4 w-4" />
+                    Cancelar
                   </motion.button>
-                ) : (
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={handleSubmit(submit)}
-                    disabled={loading || total !== 100}
-                    className="flex-1 rounded-xl  px-5 py-2.5 font-semibold text-white bg-blue-600 hover:from-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-blue-200"
-                  >
-                    {loading ? (
-                      <span className="flex items-center justify-center gap-2">
-                        <motion.div
-                          animate={{ rotate: 360 }}
-                          transition={{
-                            duration: 1,
-                            repeat: Number.POSITIVE_INFINITY,
-                            ease: "linear",
-                          }}
-                        >
-                          <Sparkles className="h-4 w-4" />
-                        </motion.div>
-                        Guardando...
-                      </span>
-                    ) : (
-                      "Guardar Asistente"
-                    )}
-                  </motion.button>
-                )}
+
+                  {step === 1 ? (
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={nextStep}
+                      disabled={!step1Valid || loading}
+                      className="order-3 rounded-lg sm:rounded-xl px-4 sm:px-5 py-2.5 font-semibold bg-blue-600 text-white hover:bg-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1.5 sm:gap-2 text-sm sm:text-base shadow-lg shadow-blue-200"
+                    >
+                      Siguiente
+                      <ChevronRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                    </motion.button>
+                  ) : (
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={handleSubmit(submit)}
+                      disabled={loading || total !== 100}
+                      className="order-3 rounded-lg sm:rounded-xl px-4 sm:px-5 py-2.5 font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-blue-200 text-sm sm:text-base"
+                    >
+                      {loading ? (
+                        <span className="flex items-center justify-center gap-1.5 sm:gap-2">
+                          <motion.div
+                            animate={{ rotate: 360 }}
+                            transition={{
+                              duration: 1,
+                              repeat: Number.POSITIVE_INFINITY,
+                              ease: "linear",
+                            }}
+                          >
+                            <Sparkles className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                          </motion.div>
+                          Guardando...
+                        </span>
+                      ) : (
+                        "Guardar Asistente"
+                      )}
+                    </motion.button>
+                  )}
+                </div>
               </div>
             </motion.div>
           </div>

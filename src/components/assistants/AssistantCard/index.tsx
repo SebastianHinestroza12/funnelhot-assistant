@@ -27,25 +27,13 @@ export const AssistantCard = ({
   const handleDelete = async () => {
     setLoading(true);
 
-    const toastId = toast.loading("Eliminando asistente...");
-
     try {
       await delaySeconds();
       await onDelete();
 
-      toast.update(toastId, {
-        render: "Asistente eliminado correctamente",
-        type: "success",
-        isLoading: false,
-        autoClose: 3000,
-      });
+      toast.success("Asistente eliminado correctamente");
     } catch {
-      toast.update(toastId, {
-        render: "Error al eliminar el asistente",
-        type: "error",
-        isLoading: false,
-        autoClose: 3000,
-      });
+      toast.error("Error al eliminar el asistente");
     } finally {
       setLoading(false);
       setConfirmOpen(false);
