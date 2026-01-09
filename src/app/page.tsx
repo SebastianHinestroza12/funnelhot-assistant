@@ -19,7 +19,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-linear-to-br from-slate-50 to-slate-100/50">
       <main className="mx-auto max-w-7xl px-6 py-8">
-        <div className="mb-8 flex items-center justify-between">
+        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h1 className="text-3xl font-bold text-slate-900">Asistentes IA</h1>
             <p className="mt-1 text-sm text-slate-500">

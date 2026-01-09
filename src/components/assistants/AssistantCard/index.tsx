@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { delaySeconds } from "@/utils/delay";
 import { ConfirmDeleteModal } from "@/components/assistants/ConfirmDeleteModal";
 import { motion } from "framer-motion";
-import { Pencil, Trash2, MessageSquare } from "lucide-react";
+import { Pencil, Trash2, Bot, MessageSquare } from "lucide-react";
 
 type Props = {
   assistant: Assistant;
@@ -30,7 +30,7 @@ export const AssistantCard = ({
     const toastId = toast.loading("Eliminando asistente...");
 
     try {
-      await delaySeconds(1200);
+      await delaySeconds();
       await onDelete();
 
       toast.update(toastId, {
@@ -74,7 +74,7 @@ export const AssistantCard = ({
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-3">
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br from-blue-500 to-blue-600 shadow-lg shadow-blue-500/25">
-                <MessageSquare className="h-6 w-6 text-white" />
+                <Bot className="h-6 w-6 text-white" />
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-slate-900 leading-tight">
