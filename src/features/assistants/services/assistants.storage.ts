@@ -36,3 +36,11 @@ export const deleteAssistant = (id: string) => {
   const assistants = getAssistants().filter((a) => a.id !== id);
   saveAssistants(assistants);
 };
+
+export const saveAssistantRules = (id: string, rules: string) => {
+  const assistants = getAssistants().map((a) =>
+    a.id === id ? { ...a, rules } : a,
+  );
+
+  saveAssistants(assistants);
+};
