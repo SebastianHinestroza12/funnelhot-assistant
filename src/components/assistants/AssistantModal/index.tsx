@@ -14,7 +14,7 @@ import {
   Alert,
 } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
@@ -46,6 +46,7 @@ export const AssistantModal = ({
     trigger,
     reset,
     watch,
+    control,
     formState: { errors },
   } = useForm<AssistantFormData>({
     resolver: zodResolver(assistantSchema),
@@ -70,6 +71,8 @@ export const AssistantModal = ({
     onClose();
     setStep(1);
   };
+
+  const prevStep = () => setStep(1);
 
   const short = watch("responseLength.short") || 0;
   const medium = watch("responseLength.medium") || 0;
@@ -99,35 +102,47 @@ export const AssistantModal = ({
               }
             />
 
-            <TextField
-              select
-              label="Idioma principal"
-              fullWidth
-              {...register("language")}
-              error={!!errors.language}
-              helperText={errors.language?.message}
-            >
-              {Object.values(Language).map((lang) => (
-                <MenuItem key={lang} value={lang}>
-                  {lang}
-                </MenuItem>
-              ))}
-            </TextField>
+            <Controller
+              name="language"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  select
+                  label="Idioma principal"
+                  fullWidth
+                  error={!!errors.language}
+                  helperText={errors.language?.message}
+                >
+                  {Object.values(Language).map((lang) => (
+                    <MenuItem key={lang} value={lang}>
+                      {lang}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              )}
+            />
 
-            <TextField
-              select
-              label="Tono de comunicación"
-              fullWidth
-              {...register("tone")}
-              error={!!errors.tone}
-              helperText={errors.tone?.message}
-            >
-              {Object.values(Tone).map((tone) => (
-                <MenuItem key={tone} value={tone}>
-                  {tone}
-                </MenuItem>
-              ))}
-            </TextField>
+            <Controller
+              name="tone"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  select
+                  label="Tono de comunicación"
+                  fullWidth
+                  error={!!errors.tone}
+                  helperText={errors.tone?.message}
+                >
+                  {Object.values(Tone).map((tone) => (
+                    <MenuItem key={tone} value={tone}>
+                      {tone}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              )}
+            />
           </div>
         )}
 
@@ -181,13 +196,19 @@ export const AssistantModal = ({
             Siguiente
           </Button>
         ) : (
-          <Button
-            variant="contained"
-            startIcon={<SaveIcon />}
-            onClick={handleSubmit(submit)}
-          >
-            Guardar
-          </Button>
+          <div className="flex gap-2">
+            <Button variant="outlined" onClick={prevStep}>
+              Atrás
+            </Button>
+
+            <Button
+              variant="contained"
+              startIcon={<SaveIcon />}
+              onClick={handleSubmit(submit)}
+            >
+              Guardar
+            </Button>
+          </div>
         )}
       </DialogActions>
     </Dialog>

@@ -8,9 +8,9 @@ export const DEFAULT_VALUES: AssistantFormData = {
   language: Language.Español,
   tone: Tone.Profesional,
   responseLength: {
-    short: 0,
-    medium: 0,
-    long: 0,
+    short: 30,
+    medium: 50,
+    long: 20,
   },
   audioEnabled: false,
 };
