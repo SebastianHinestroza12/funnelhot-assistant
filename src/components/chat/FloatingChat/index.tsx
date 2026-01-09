@@ -74,12 +74,24 @@ export const FloatingChat = ({ assistant }: Props) => {
     <>
       <motion.button
         onClick={() => setOpen(true)}
-        className="fixed bottom-6 right-6 z-40 flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-700 text-white shadow-2xl border border-slate-700 hover:bg-blue-800 transition-colors md:h-14 md:w-14"
-        whileHover={{ scale: 1.05 }}
+        className="fixed bottom-6 right-6 z-40 flex h-16 w-16 items-center cursor-pointer justify-center rounded-2xl bg-blue-700 text-white shadow-2xl border border-slate-700 hover:bg-blue-800 transition-colors md:h-14 md:w-14"
+        whileHover={{ scale: 1.08 }}
         whileTap={{ scale: 0.95 }}
         initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.3 }}
+        animate={{
+          opacity: 1,
+          scale: 1,
+          y: [0, -6, 0],
+        }}
+        transition={{
+          opacity: { duration: 0.3 },
+          scale: { duration: 0.3 },
+          y: {
+            duration: 2.5,
+            repeat: Infinity,
+            ease: "easeInOut",
+          },
+        }}
       >
         <MessageCircle className="h-6 w-6 md:h-5 md:w-5" />
       </motion.button>
