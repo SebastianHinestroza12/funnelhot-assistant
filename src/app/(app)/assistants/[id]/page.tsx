@@ -33,7 +33,7 @@ export default function AssistantTrainingPage() {
 
   useEffect(() => {
     if (!assistant) {
-      router.push("/");
+      router.push("/home");
     }
   }, [assistant, router]);
 
@@ -57,7 +57,7 @@ export default function AssistantTrainingPage() {
     <div className="min-h-screen bg-slate-50">
       <div className="mx-auto max-w-5xl px-4 py-4 sm:px-6 lg:px-8">
         <div className="mb-8">
-          <Link href="/">
+          <Link href="/home">
             <Button
               variant="contained"
               size="medium"

@@ -2,78 +2,10 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import {
-  ArrowRight,
-  Bot,
-  Brain,
-  Sparkles,
-  Zap,
-  MessageSquare,
-  Globe,
-} from "lucide-react";
+import { ArrowRight, Bot, Sparkles } from "lucide-react";
+import { containerVariants, FEATURES, itemVariants } from "@/constants";
 
 export default function LandingPage() {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.5,
-        ease: [0.48, 0.15, 0.25, 0.96],
-      },
-    },
-  };
-
-  const features = [
-    {
-      icon: Bot,
-      title: "Asistentes Inteligentes",
-      description:
-        "Crea asistentes de IA personalizados con diferentes tonos y personalidades",
-    },
-    {
-      icon: MessageSquare,
-      title: "Respuestas Personalizadas",
-      description:
-        "Configura la longitud y estilo de las respuestas según tus necesidades",
-    },
-    {
-      icon: Brain,
-      title: "Entrenamiento Avanzado",
-      description:
-        "Entrena a tus asistentes con prompts específicos para tu negocio",
-    },
-    {
-      icon: Globe,
-      title: "Multiidioma",
-      description:
-        "Soporta múltiples idiomas para interacciones globales con tus leads",
-    },
-    {
-      icon: Zap,
-      title: "Automatización",
-      description: "Automatiza tus interacciones y ahorra tiempo valioso",
-    },
-    {
-      icon: Sparkles,
-      title: "Interfaz Intuitiva",
-      description:
-        "Gestión simple y poderosa de todos tus asistentes en un solo lugar",
-    },
-  ];
-
   return (
     <div className="min-h-screen bg-linear-to-br from-slate-950 via-blue-950 to-slate-900">
       <motion.nav
@@ -219,7 +151,7 @@ export default function LandingPage() {
             viewport={{ once: true, margin: "-50px" }}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
           >
-            {features.map((feature, index) => (
+            {FEATURES.map((feature, index) => (
               <motion.div
                 key={index}
                 variants={itemVariants}
@@ -273,7 +205,6 @@ export default function LandingPage() {
               </motion.div>
             </div>
 
-            {/* Decorative elements */}
             <div className="absolute inset-0 overflow-hidden">
               <motion.div
                 animate={{ rotate: 360 }}
@@ -308,7 +239,8 @@ export default function LandingPage() {
             <span className="text-xl font-bold text-white">Funnelhot AI</span>
           </div>
           <p className="text-slate-400">
-            © 2026 Funnelhot AI. Automatiza con inteligencia.
+            © {new Date().getFullYear()} Funnelhot AI. Automatiza con
+            inteligencia.
           </p>
         </div>
       </footer>

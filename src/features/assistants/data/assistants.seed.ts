@@ -1,4 +1,4 @@
-import { Assistant , Language, Tone} from "@/features/assistants/interfaces";
+import { Assistant, Language, Tone } from "@/features/assistants/interfaces";
 
 export const ASSISTANTS_SEED: Assistant[] = [
   {
@@ -29,6 +29,38 @@ export const ASSISTANTS_SEED: Assistant[] = [
     audioEnabled: false,
     rules:
       "Ayudas a resolver problemas técnicos de manera clara y paso a paso.",
+    createdAt: new Date().toISOString(),
+  },
+
+  {
+    id: "3",
+    name: "Asistente de Marketing Digital",
+    language: Language.Portugués,
+    tone: Tone.Casual,
+    responseLength: {
+      short: 25,
+      medium: 45,
+      long: 30,
+    },
+    audioEnabled: false,
+    rules:
+      "Eres un experto en marketing digital. Propón ideas creativas, campañas, copies y estrategias enfocadas en conversión y crecimiento.",
+    createdAt: new Date().toISOString(),
+  },
+
+  {
+    id: "4",
+    name: "Asistente de Atención al Cliente",
+    language: Language.Español,
+    tone: Tone.Formal,
+    responseLength: {
+      short: 40,
+      medium: 40,
+      long: 20,
+    },
+    audioEnabled: true,
+    rules:
+      "Atiendes a clientes con empatía y paciencia. Responde de forma clara, tranquilizadora y orientada a resolver inquietudes.",
     createdAt: new Date().toISOString(),
   },
 ];

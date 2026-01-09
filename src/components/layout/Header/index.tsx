@@ -1,6 +1,6 @@
 "use client";
 
-import PsychologyIcon from "@mui/icons-material/Psychology";
+import { Bot } from "lucide-react";
 
 export const Header = () => {
   return (
@@ -8,13 +8,13 @@ export const Header = () => {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
         <div className="flex items-center gap-3">
           <div className="relative flex h-11 w-11 items-center justify-center rounded-xl bg-linear-to-br from-blue-600 to-blue-700 shadow-lg shadow-blue-600/25 transition-transform hover:scale-105">
-            <PsychologyIcon className="text-white" sx={{ fontSize: 24 }} />
+            <Bot className="w-6 h-6 text-white" />
             <div className="absolute inset-0 rounded-xl bg-linear-to-tr from-white/0 to-white/10" />
           </div>
 
           <div className="flex flex-col leading-tight">
             <span className="text-base font-semibold text-slate-900 tracking-tight">
-              Funnelhot
+              Funnelhot AI
             </span>
             <span className="text-xs font-medium text-slate-500">
               Gestión de Asistentes IA
