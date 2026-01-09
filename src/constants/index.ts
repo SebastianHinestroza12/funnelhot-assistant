@@ -14,3 +14,10 @@ export const DEFAULT_VALUES: AssistantFormData = {
   },
   audioEnabled: false,
 };
+
+export const MOCK_RESPONSES = [
+  "Claro, puedo ayudarte con eso.",
+  "Entiendo tu solicitud.",
+  "Vamos a resolverlo paso a paso.",
+  "Buena pregunta, aquí tienes la respuesta.",
+];

@@ -12,11 +12,12 @@ import {
   Checkbox,
   FormControlLabel,
   Alert,
+  CircularProgress,
 } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
+import { toast } from "react-toastify";
 import {
   assistantSchema,
   AssistantFormData,
@@ -24,12 +25,13 @@ import {
 import { StepIndicator } from "@/components/ui/StepIndicator";
 import { Language, Tone } from "@/features/assistants/interfaces";
 import { DEFAULT_VALUES } from "@/constants";
+import { delaySeconds } from "@/utils/delay";
 
 type Props = {
   open: boolean;
   initialData?: AssistantFormData;
   onClose: () => void;
-  onSave: (data: AssistantFormData) => void;
+  onSave: (data: AssistantFormData) => Promise<void> | void;
 };
 
 export const AssistantModal = ({
@@ -39,6 +41,7 @@ export const AssistantModal = ({
   onSave,
 }: Props) => {
   const [step, setStep] = useState<1 | 2>(1);
+  const [loading, setLoading] = useState(false);
 
   const {
     register,
@@ -66,10 +69,39 @@ export const AssistantModal = ({
     if (valid) setStep(2);
   };
 
-  const submit = (data: AssistantFormData) => {
-    onSave(data);
-    onClose();
-    setStep(1);
+  const submit = async (data: AssistantFormData) => {
+    setLoading(true);
+
+    const isEdit = Boolean(initialData);
+    const toastId = toast.loading(
+      isEdit ? "Actualizando asistente..." : "Creando asistente...",
+    );
+
+    try {
+      await delaySeconds();
+      await onSave(data);
+
+      toast.update(toastId, {
+        render: isEdit
+          ? "Asistente actualizado correctamente"
+          : "Asistente creado correctamente",
+        type: "success",
+        isLoading: false,
+        autoClose: 3000,
+      });
+
+      onClose();
+      setStep(1);
+    } catch {
+      toast.update(toastId, {
+        render: "Ocurrió un error, intenta nuevamente",
+        type: "error",
+        isLoading: false,
+        autoClose: 3000,
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const prevStep = () => setStep(1);
@@ -80,7 +112,12 @@ export const AssistantModal = ({
   const total = short + medium + long;
 
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
+    <Dialog
+      open={open}
+      onClose={loading ? undefined : onClose}
+      fullWidth
+      maxWidth="sm"
+    >
       <DialogTitle>
         {initialData ? "Editar Asistente" : "Crear Asistente"}
       </DialogTitle>
@@ -106,14 +143,7 @@ export const AssistantModal = ({
               name="language"
               control={control}
               render={({ field }) => (
-                <TextField
-                  {...field}
-                  select
-                  label="Idioma principal"
-                  fullWidth
-                  error={!!errors.language}
-                  helperText={errors.language?.message}
-                >
+                <TextField {...field} select label="Idioma principal" fullWidth>
                   {Object.values(Language).map((lang) => (
                     <MenuItem key={lang} value={lang}>
                       {lang}
@@ -132,8 +162,6 @@ export const AssistantModal = ({
                   select
                   label="Tono de comunicación"
                   fullWidth
-                  error={!!errors.tone}
-                  helperText={errors.tone?.message}
                 >
                   {Object.values(Tone).map((tone) => (
                     <MenuItem key={tone} value={tone}>
@@ -155,14 +183,12 @@ export const AssistantModal = ({
               fullWidth
               {...register("responseLength.short", { valueAsNumber: true })}
             />
-
             <TextField
               label="Respuestas medias (%)"
               type="number"
               fullWidth
               {...register("responseLength.medium", { valueAsNumber: true })}
             />
-
             <TextField
               label="Respuestas largas (%)"
               type="number"
@@ -187,26 +213,29 @@ export const AssistantModal = ({
       </DialogContent>
 
       <DialogActions className="flex justify-between px-6 pb-4">
-        <Button variant="outlined" onClick={onClose}>
+        <Button variant="outlined" onClick={onClose} disabled={loading}>
           Cancelar
         </Button>
 
         {step === 1 ? (
-          <Button variant="contained" onClick={nextStep}>
+          <Button variant="contained" onClick={nextStep} disabled={loading}>
             Siguiente
           </Button>
         ) : (
           <div className="flex gap-2">
-            <Button variant="outlined" onClick={prevStep}>
+            <Button variant="outlined" onClick={prevStep} disabled={loading}>
               Atrás
             </Button>
 
             <Button
               variant="contained"
-              startIcon={<SaveIcon />}
               onClick={handleSubmit(submit)}
+              disabled={loading}
+              startIcon={
+                loading ? <CircularProgress size={18} /> : <SaveIcon />
+              }
             >
-              Guardar
+              {loading ? "Guardando..." : "Guardar"}
             </Button>
           </div>
         )}

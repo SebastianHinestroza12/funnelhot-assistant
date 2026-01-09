@@ -11,6 +11,17 @@ export enum Tone {
   Amigable = "Amigable",
 }
 
+export interface TrainingData {
+  rules: string;
+}
+
+export interface ChatMessage {
+  id: string;
+  role: "user" | "assistant";
+  content: string;
+}
+
+
 export interface ResponseLength {
   short: number;
   medium: number;
