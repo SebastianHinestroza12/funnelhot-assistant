@@ -477,7 +477,7 @@ export const AssistantModal = ({
 
               <div className="border-t border-slate-200 bg-slate-50 p-3 sm:p-4 md:p-6 shrink-0">
                 <div
-                  className={`flex gap-2 sm:gap-3 ${
+                  className={`flex gap-2 sm:gap-3 justify-between ${
                     step === 2 ? "flex-col sm:flex-row" : "flex-col sm:flex-row"
                   }`}
                 >
@@ -487,7 +487,7 @@ export const AssistantModal = ({
                       whileTap={{ scale: 0.98 }}
                       onClick={prevStep}
                       disabled={loading}
-                      className="order-1 sm:order-0 rounded-lg sm:rounded-xl border-2 border-slate-300 px-4 sm:px-5 py-2.5 font-medium text-slate-700 hover:bg-white hover:border-slate-400 transition-all disabled:opacity-50 flex items-center justify-center gap-1.5 sm:gap-2 text-sm sm:text-base"
+                      className="order-1  cursor-pointer sm:order-0 rounded-lg sm:rounded-xl border-2 border-slate-300 px-4 sm:px-5 py-2.5 font-medium text-slate-700 hover:bg-white hover:border-slate-400 transition-all disabled:opacity-50 flex items-center justify-center gap-1.5 sm:gap-2 text-sm sm:text-base"
                     >
                       <ChevronLeft className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                       Anterior
@@ -499,7 +499,7 @@ export const AssistantModal = ({
                     whileTap={{ scale: 0.98 }}
                     onClick={onClose}
                     disabled={loading}
-                    className={`rounded-lg sm:rounded-xl border-2 border-slate-300 px-4 sm:px-5 py-2.5 font-medium text-slate-700 hover:bg-white hover:border-slate-400 transition-all disabled:opacity-50 text-sm sm:text-base ${
+                    className={`rounded-lg cursor-pointer sm:rounded-xl border-2 border-slate-300 px-4 sm:px-5 py-2.5 font-medium text-slate-700 hover:bg-white hover:border-slate-400 transition-all disabled:opacity-50 text-sm sm:text-base ${
                       step === 2 ? "order-2 sm:order-0" : "order-1"
                     }`}
                   >
@@ -512,7 +512,7 @@ export const AssistantModal = ({
                       whileTap={{ scale: 0.98 }}
                       onClick={nextStep}
                       disabled={!step1Valid || loading}
-                      className="order-3 rounded-lg sm:rounded-xl px-4 sm:px-5 py-2.5 font-semibold bg-blue-600 text-white hover:bg-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1.5 sm:gap-2 text-sm sm:text-base shadow-lg shadow-blue-200"
+                      className="order-3 rounded-lg cursor-pointer sm:rounded-xl px-4 sm:px-5 py-2.5 font-semibold bg-blue-600 text-white hover:bg-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1.5 sm:gap-2 text-sm sm:text-base shadow-lg shadow-blue-200"
                     >
                       Siguiente
                       <ChevronRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
@@ -523,7 +523,7 @@ export const AssistantModal = ({
                       whileTap={{ scale: 0.98 }}
                       onClick={handleSubmit(submit)}
                       disabled={loading || total !== 100}
-                      className="order-3 rounded-lg sm:rounded-xl px-4 sm:px-5 py-2.5 font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-blue-200 text-sm sm:text-base"
+                      className="order-3 cursor-pointer rounded-lg sm:rounded-xl px-4 sm:px-5 py-2.5 font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-blue-200 text-sm sm:text-base"
                     >
                       {loading ? (
                         <span className="flex items-center justify-center gap-1.5 sm:gap-2">
