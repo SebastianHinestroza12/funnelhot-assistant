@@ -351,52 +351,120 @@ export const AssistantModal = ({
                                 </motion.span>
                               </div>
                             </div>
-
                             <div className="relative px-1">
-                              <input
-                                type="range"
-                                min="0"
-                                max="100"
-                                step="5"
-                                value={value}
-                                onChange={(e) =>
-                                  handleSliderChange(
-                                    key,
-                                    Number(e.target.value),
-                                  )
-                                }
-                                disabled={loading}
-                                className="w-full h-2 sm:h-3 rounded-full appearance-none cursor-pointer transition-all"
-                                style={{
-                                  background: `linear-gradient(to right, ${
-                                    key === "short"
-                                      ? "#10b981"
-                                      : key === "medium"
-                                      ? "#3b82f6"
-                                      : "#a855f7"
-                                  } 0%, ${
-                                    key === "short"
-                                      ? "#10b981"
-                                      : key === "medium"
-                                      ? "#3b82f6"
-                                      : "#a855f7"
-                                  } ${value}%, #e2e8f0 ${value}%, #e2e8f0 100%)`,
-                                }}
-                              />
-                              {/* Mobile touch area enhancement */}
+                              <div className="relative w-full">
+                                {/* Input range principal */}
+                                <input
+                                  type="range"
+                                  min="0"
+                                  max="100"
+                                  step="5"
+                                  value={value}
+                                  onChange={(e) =>
+                                    handleSliderChange(
+                                      key,
+                                      Number(e.target.value),
+                                    )
+                                  }
+                                  onTouchStart={(e) => e.stopPropagation()}
+                                  onTouchMove={(e) => e.stopPropagation()}
+                                  disabled={loading}
+                                  className="w-full h-2 sm:h-3 rounded-full appearance-none cursor-pointer transition-all touch-manipulation"
+                                  style={{
+                                    background: `linear-gradient(to right, ${
+                                      key === "short"
+                                        ? "#10b981"
+                                        : key === "medium"
+                                        ? "#3b82f6"
+                                        : "#a855f7"
+                                    } 0%, ${
+                                      key === "short"
+                                        ? "#10b981"
+                                        : key === "medium"
+                                        ? "#3b82f6"
+                                        : "#a855f7"
+                                    } ${value}%, #e2e8f0 ${value}%, #e2e8f0 100%)`,
+                                    WebkitTapHighlightColor: "transparent",
+                                  }}
+                                />
+
+                                {/* Custom thumb para mejor compatibilidad mobile */}
+                                <div
+                                  className="absolute top-1/2 transform -translate-y-1/2 pointer-events-none"
+                                  style={{
+                                    left: `${value}%`,
+                                    marginLeft: "-6px",
+                                  }}
+                                >
+                                  <div
+                                    className={`w-4 h-4 sm:w-5 sm:h-5 rounded-full shadow-lg ${
+                                      key === "short"
+                                        ? "bg-emerald-500"
+                                        : key === "medium"
+                                        ? "bg-blue-500"
+                                        : "bg-purple-500"
+                                    }`}
+                                  />
+                                </div>
+                              </div>
+
                               {isMobile && (
-                                <div className="absolute inset-0 -m-2"></div>
+                                <div
+                                  className="absolute inset-0 -m-3 cursor-pointer"
+                                  onTouchStart={(e) => {
+                                    e.preventDefault();
+                                    const rect =
+                                      e.currentTarget.getBoundingClientRect();
+                                    const touch = e.touches[0];
+                                    const x = touch.clientX - rect.left;
+                                    const percentage = Math.min(
+                                      Math.max((x / rect.width) * 100, 0),
+                                      100,
+                                    );
+                                    const roundedValue =
+                                      Math.round(percentage / 5) * 5;
+                                    handleSliderChange(key, roundedValue);
+                                  }}
+                                  onTouchMove={(e) => {
+                                    e.preventDefault();
+                                    const rect =
+                                      e.currentTarget.getBoundingClientRect();
+                                    const touch = e.touches[0];
+                                    const x = touch.clientX - rect.left;
+                                    const percentage = Math.min(
+                                      Math.max((x / rect.width) * 100, 0),
+                                      100,
+                                    );
+                                    const roundedValue =
+                                      Math.round(percentage / 5) * 5;
+                                    handleSliderChange(key, roundedValue);
+                                  }}
+                                />
                               )}
                             </div>
 
-                            {/* Step indicators for mobile */}
                             {isMobile && (
-                              <div className="flex justify-between text-xs text-slate-500 px-1">
-                                <span>0%</span>
-                                <span>25%</span>
-                                <span>50%</span>
-                                <span>75%</span>
-                                <span>100%</span>
+                              <div className="flex items-center justify-between gap-1">
+                                {[0, 25, 50, 75, 100].map((percentage) => (
+                                  <button
+                                    key={percentage}
+                                    type="button"
+                                    onClick={() =>
+                                      handleSliderChange(key, percentage)
+                                    }
+                                    className={`flex-1 text-xs py-1.5 rounded-md transition-colors ${
+                                      value === percentage
+                                        ? key === "short"
+                                          ? "bg-emerald-500 text-white"
+                                          : key === "medium"
+                                          ? "bg-blue-500 text-white"
+                                          : "bg-purple-500 text-white"
+                                        : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                                    }`}
+                                  >
+                                    {percentage}%
+                                  </button>
+                                ))}
                               </div>
                             )}
                           </div>
