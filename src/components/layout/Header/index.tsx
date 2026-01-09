@@ -1,37 +1,36 @@
 "use client";
 
 import PsychologyIcon from "@mui/icons-material/Psychology";
-import Chip from "@mui/material/Chip";
 
 export const Header = () => {
   return (
-    <header className="sticky top-0 z-50 border-b bg-white/80 backdrop-blur">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
+    <header className="sticky top-0 z-50 border-b border-slate-200/60 bg-white/80 backdrop-blur-xl shadow-sm">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 text-white shadow-sm">
-            <PsychologyIcon />
+          <div className="relative flex h-11 w-11 items-center justify-center rounded-xl bg-linear-to-br from-blue-600 to-blue-700 shadow-lg shadow-blue-600/25 transition-transform hover:scale-105">
+            <PsychologyIcon className="text-white" sx={{ fontSize: 24 }} />
+            <div className="absolute inset-0 rounded-xl bg-linear-to-tr from-white/0 to-white/10" />
           </div>
 
           <div className="flex flex-col leading-tight">
-            <span className="text-sm font-semibold text-slate-900">
+            <span className="text-base font-semibold text-slate-900 tracking-tight">
               Funnelhot
             </span>
-            <span className="text-xs text-slate-500">
+            <span className="text-xs font-medium text-slate-500">
               Gestión de Asistentes IA
             </span>
           </div>
-
-          <Chip
-            label="Módulo"
-            size="small"
-            color="primary"
-            variant="outlined"
-          />
         </div>
 
-        {/* Placeholder para futuro */}
-        <div className="text-xs text-slate-400">Prueba Técnica</div>
+        <div className="flex items-center gap-3">
+          <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200/60">
+            <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-xs font-medium text-emerald-700">
+              Sistema Activo
+            </span>
+          </div>
+        </div>
       </div>
     </header>
   );
-}
+};
